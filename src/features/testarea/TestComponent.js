@@ -1,13 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import Script from "react-load-script";
 import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng
 } from "react-places-autocomplete";
-import GoogleMapReact from "google-map-react";
 import { incrementData, decrementData } from "./testActions";
-import { Button, Icon } from "semantic-ui-react";
+import { Button } from "semantic-ui-react";
+import { openModal } from "../modals/modalActions";
 
 const mapState = state => ({
   data: state.test.data
@@ -15,10 +14,9 @@ const mapState = state => ({
 
 const mapDispatch = {
   incrementData,
-  decrementData
+  decrementData,
+  openModal
 };
-
-const Marker = () => <Icon name="marker" size="big" color="red" />;
 
 export class TestComponent extends Component {
   static defaultProps = {
@@ -57,7 +55,7 @@ export class TestComponent extends Component {
       onChange: this.onChange
     };
 
-    const { decrementData, incrementData, data } = this.props;
+    const { decrementData, incrementData, data, openModal } = this.props;
     return (
       <div>
         {/* <Script
@@ -68,6 +66,11 @@ export class TestComponent extends Component {
         <h3>The data is {data}</h3>
         <Button onClick={incrementData} positive content="Increment" />
         <Button onClick={decrementData} negative content="Decrement" />
+        <Button
+          onClick={() => openModal("TestModal", { data: 43 })}
+          color="teal"
+          content="Open Modal"
+        />
         <br />
         <br />
         <form onSubmit={this.handleFormSubmit}>
@@ -76,17 +79,6 @@ export class TestComponent extends Component {
           )}
           <button type="submit">Submit</button>
         </form>
-        <div style={{ height: "300px", width: "100%" }}>
-          <GoogleMapReact
-            bootstrapURLKeys={{
-              key: "AIzaSyAvzaasXFmOq0nHFUFv4IWmtBAdNwT2jrg"
-            }}
-            defaultCenter={this.props.center}
-            defaultZoom={this.props.zoom}
-          >
-            <Marker lat={59.955413} lng={30.337844} text={"Kreyser Avrora"} />
-          </GoogleMapReact>
-        </div>
       </div>
     );
   }
