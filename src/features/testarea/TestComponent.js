@@ -4,17 +4,18 @@ import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng
 } from "react-places-autocomplete";
-import { incrementData, decrementData } from "./testActions";
+import { incrementAsync, decrementAsync } from "./testActions";
 import { Button } from "semantic-ui-react";
 import { openModal } from "../modals/modalActions";
 
 const mapState = state => ({
-  data: state.test.data
+  data: state.test.data,
+  loading: state.test.loading
 });
 
 const mapDispatch = {
-  incrementData,
-  decrementData,
+  incrementAsync,
+  decrementAsync,
   openModal
 };
 
@@ -55,7 +56,13 @@ export class TestComponent extends Component {
       onChange: this.onChange
     };
 
-    const { decrementData, incrementData, data, openModal } = this.props;
+    const {
+      decrementAsync,
+      incrementAsync,
+      data,
+      openModal,
+      loading
+    } = this.props;
     return (
       <div>
         {/* <Script
@@ -64,8 +71,18 @@ export class TestComponent extends Component {
         /> */}
         <h1>Test Component</h1>
         <h3>The data is {data}</h3>
-        <Button onClick={incrementData} positive content="Increment" />
-        <Button onClick={decrementData} negative content="Decrement" />
+        <Button
+          loading={loading}
+          onClick={incrementAsync}
+          positive
+          content="Increment"
+        />
+        <Button
+          loading={loading}
+          onClick={decrementAsync}
+          negative
+          content="Decrement"
+        />
         <Button
           onClick={() => openModal("TestModal", { data: 43 })}
           color="teal"
